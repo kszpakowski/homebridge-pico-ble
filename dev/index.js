@@ -1,5 +1,5 @@
 // https://github.com/micropython/micropython-lib/blob/master/micropython/bluetooth/aioble/examples/temp_sensor.py
-
+const fs = require('fs')
 const noble = require('@abandonware/noble');
 
 const service_uuid = 'cad6e164de14425f8d19f241b592a385'
@@ -22,14 +22,9 @@ async function setChr(char, val) {
 
 noble.on('discover', async (peripheral) => {
     console.log('discovered peripherial', peripheral.address)
-    await noble.stopScanningAsync();
     await peripheral.connectAsync();
     console.log('connected to peripherial')
 
-    peripheral.on('disconnect', async () => {
-        console.log('disconnected')
-        await noble.startScanningAsync([service_uuid], false);
-    })
 
     const { characteristics } = await peripheral.discoverAllServicesAndCharacteristicsAsync();
 
@@ -40,14 +35,29 @@ noble.on('discover', async (peripheral) => {
 
     brightness_characteristic.subscribe()
     brightness_characteristic.on('data', buff => {
-        console.log('brightness', buff.readInt16LE())
+        console.log(peripheral.id, 'brightness', buff.readInt16LE())
     })
 
     on_characteristic.subscribe()
     on_characteristic.on('data', buff => {
-        console.log('on', buff.readInt16LE())
+        console.log(peripheral.id, 'on', buff.readInt16LE())
     })
 
-    setChr(set_on_characteristic, true);
-    setChr(set_brightness_characteristic, 75);
+    const intervalId = setInterval(() => {
+        const settings_str = fs.readFileSync('./settings.json')
+        const settings = JSON.parse(settings_str.toString())
+        if (peripheral.id in settings) {
+            const { on, brightness } = settings[peripheral.id]
+            setChr(set_on_characteristic, on);
+            setChr(set_brightness_characteristic, brightness);
+        }
+    }, 500)
+
+
+    peripheral.on('disconnect', async () => {
+        console.log('disconnected')
+        clearInterval(intervalId)
+        await noble.startScanningAsync([service_uuid], false);
+    })
+
 });

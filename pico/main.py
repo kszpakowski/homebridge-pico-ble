@@ -12,7 +12,7 @@ import struct
 
 from lights import PwmLight
 
-light = PwmLight(4)
+light = PwmLight(4, brightness=0)
 
 _SRV_UUID = bluetooth.UUID("cad6e164-de14-425f-8d19-f241b592a385")
 _ON_CHR_UUID = bluetooth.UUID("d00b8ba4-d8ce-42ff-92f2-b0d193c58da4")
@@ -50,11 +50,13 @@ set_brightness_characteristic = aioble.Characteristic(
 
 aioble.register_services(light_service)
 
+
 async def read_set_on_chr_task():
     while True:
         _, data = await set_on_characteristic.written()
         val = struct.unpack("<b", data)
         light.set_on(bool(val[0]))
+
 
 async def read_set_brightness_chr_task():
     while True:
@@ -84,6 +86,7 @@ async def peripheral_task():
         ) as connection:
             print("Connection from", connection.device)
             await connection.disconnected(timeout_ms=None)
+
 
 async def main():
     t1 = asyncio.create_task(update_task())
