@@ -51,7 +51,7 @@ noble.on('discover', async (peripheral) => {
             setCharacteristic(set_on_characteristic, on);
             setCharacteristic(set_brightness_characteristic, brightness);
         }
-    }, 2000)
+    }, 500)
 
 
     peripheral.on('disconnect', async () => {
