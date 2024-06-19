@@ -21,9 +21,7 @@ _BRIGHTNESS_CHR_UUID = bluetooth.UUID("127cf8c9-b7fe-47e3-b2e0-3901b7988b00")
 _SET_BRIGHTNESS_CHR_UUID = bluetooth.UUID("66286dbf-e5e9-46d4-b300-a0ec456f677c")
 
 
-# TODO change appearence
-# org.bluetooth.characteristic.gap.appearance.xml
-_ADV_APPEARANCE_GENERIC_THERMOMETER = const(768)
+_ADV_APPEARANCE_LIGHT_DRIVER = const(596)
 
 # How frequently to send advertising beacons.
 _ADV_INTERVAL_MS = 250_000
@@ -82,7 +80,7 @@ async def peripheral_task():
             _ADV_INTERVAL_MS,
             name="pico-light-ble",
             services=[_SRV_UUID],
-            appearance=_ADV_APPEARANCE_GENERIC_THERMOMETER,  # TODO learn about appearance in GAP, create my own
+            appearance=_ADV_APPEARANCE_LIGHT_DRIVER,
         ) as connection:
             print("Connection from", connection.device)
             await connection.disconnected(timeout_ms=None)

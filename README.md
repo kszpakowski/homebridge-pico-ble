@@ -30,6 +30,7 @@ UUID cad6e164de14425f8d19f241b592a385
 ### BLE
 
 - [Adafruit Introduction to Bluetooth Low Energy](https://learn.adafruit.com/introduction-to-bluetooth-low-energy/gatt)
+- [Bluetooth Assigned Numbers Specification](https://www.bluetooth.com/specifications/assigned-numbers/)
 
 ### Pico
 
