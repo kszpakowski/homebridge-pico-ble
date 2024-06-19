@@ -18,10 +18,10 @@ UUID cad6e164de14425f8d19f241b592a385
 
 |name|uuid|desc|struct format|
 |-|-|-|-|
-|on|d00b8ba4d8ce42ff92f2b0d193c58da4|0 - off, 1 - on|little-endian short `<h`|
-|set_on|19380250824b46c797a979761b8a27a7||little-endian signed char `<b`|
-|brightness|127cf8c9b7fe47e3b2e03901b7988b00|brightness level from 0 to 100 |little-endian short `<h`|
-|set_brightness|66286dbfe5e946d4b300a0ec456f677c||little-endian signed char `<b`|
+|on|d00b8ba4d8ce42ff92f2b0d193c58da4|0 - off, 1 - on|little-endian char `<b`|
+|set_on|19380250824b46c797a979761b8a27a7||little-endian char `<b`|
+|brightness|127cf8c9b7fe47e3b2e03901b7988b00|brightness level from 0 to 100 |little-endian char `<b`|
+|set_brightness|66286dbfe5e946d4b300a0ec456f677c||little-endian char `<b`|
 
 > TODO describe more details
 
@@ -45,4 +45,5 @@ UUID cad6e164de14425f8d19f241b592a385
 
 ## TODO
 
-1. Unify characteristics structs to unsigned char
+1. Add characteristic value validation
+1. Verify if get and set characteristic should be separate or combined

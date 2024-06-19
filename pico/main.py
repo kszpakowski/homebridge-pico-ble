@@ -25,6 +25,7 @@ _ADV_APPEARANCE_LIGHT_DRIVER = const(596)
 
 # How frequently to send advertising beacons.
 _ADV_INTERVAL_MS = 250_000
+_STATE_UPDATE_INTERVAL_MS = 2000
 
 
 # Register GATT server.
@@ -66,12 +67,12 @@ async def read_set_brightness_chr_task():
 async def update_task():
     while True:
         on_characteristic.write(
-            struct.pack("<h", light.get_state()["on"]), send_update=True
+            struct.pack("<b", light.get_state()["on"]), send_update=True
         )
         brightness_characteristic.write(
-            struct.pack("<h", light.get_state()["brightness"]), send_update=True
+            struct.pack("<b", light.get_state()["brightness"]), send_update=True
         )
-        await asyncio.sleep_ms(1000)
+        await asyncio.sleep_ms(_STATE_UPDATE_INTERVAL_MS)
 
 
 async def peripheral_task():

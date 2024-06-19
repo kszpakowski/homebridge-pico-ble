@@ -14,9 +14,9 @@ noble.on('stateChange', async (state) => {
     }
 });
 
-async function setChr(char, val) {
+async function setCharacteristic(char, val) {
     const bbuff = Buffer.alloc(1)
-    bbuff.writeUInt8(val, 0)
+    bbuff.writeInt8(val, 0)
     await char.writeAsync(bbuff, false)
 }
 
@@ -35,12 +35,12 @@ noble.on('discover', async (peripheral) => {
 
     brightness_characteristic.subscribe()
     brightness_characteristic.on('data', buff => {
-        console.log(peripheral.id, 'brightness', buff.readInt16LE())
+        console.log(new Date(), peripheral.id, 'brightness', buff.readInt8())
     })
 
     on_characteristic.subscribe()
     on_characteristic.on('data', buff => {
-        console.log(peripheral.id, 'on', buff.readInt16LE())
+        console.log(new Date(), peripheral.id, 'on', buff.readInt8())
     })
 
     const intervalId = setInterval(() => {
@@ -48,10 +48,10 @@ noble.on('discover', async (peripheral) => {
         const settings = JSON.parse(settings_str.toString())
         if (peripheral.id in settings) {
             const { on, brightness } = settings[peripheral.id]
-            setChr(set_on_characteristic, on);
-            setChr(set_brightness_characteristic, brightness);
+            setCharacteristic(set_on_characteristic, on);
+            setCharacteristic(set_brightness_characteristic, brightness);
         }
-    }, 500)
+    }, 2000)
 
 
     peripheral.on('disconnect', async () => {
